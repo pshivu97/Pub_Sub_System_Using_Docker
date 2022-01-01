@@ -1,0 +1,305 @@
+<head>
+    <meta charset="utf-8">
+    <title>Node Tutorial</title>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+</head>
+<style>
+    table,
+    th,
+    td {
+        border: 1px solid black;
+        padding: 15px;
+    }
+
+    table {
+        border-spacing: 15px;
+    }
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        load_table_data();
+    });
+
+    function load_table_data() {
+        //console.log("sw");
+        get_sub_data();
+        setTimeout(load_table_data, 1000);
+    }
+
+    function get_sub_data(){
+        //console.log("sw");
+        $.ajax({
+            type: "GET",
+            url: 'http://localhost:4000/get_subscription_data',
+            success : renderTable
+        })
+    }
+    
+
+    function renderTable(data){
+        console.log(data);
+        if(data.name == 'chicken'){
+            jQuery("#crep1").text(data.name);
+            jQuery("#crep2").text(data.protein);
+            jQuery("#crep3").text(data.calories);
+        }
+        if(data.name == 'fish'){
+            jQuery("#frep1").text(data.name);
+            jQuery("#frep2").text(data.protein);
+            jQuery("#frep3").text(data.calories);
+        }
+        if(data.name == 'beef'){
+            jQuery("#brep1").text(data.name);
+            jQuery("#brep2").text(data.protein);
+            jQuery("#brep3").text(data.calories);
+        }
+        if(data.name == 'pork'){
+            jQuery("#prep1").text(data.name);
+            jQuery("#prep2").text(data.protein);
+            jQuery("#prep3").text(data.calories);
+        }
+        
+    }
+
+    function removeSubData(){
+        $.ajax({
+            type: "GET",
+            url: 'http://localhost:4000/delete_subscription_data'
+        }); 
+    }
+
+    function subscribe_chicken() {
+        $.ajax({
+            type: "POST",
+            url: 'http://localhost:4000/subscribe_chicken'
+        });
+        alert("Subscribed to chicken Details successfully");
+    }
+    function unsubscribe_chicken() {
+        $.ajax({
+            type: "POST",
+            url: 'http://localhost:4000/unsubscribe_chicken'
+        });
+        removeSubData();
+        jQuery("#crep1").text('-');
+        jQuery("#crep2").text('-');
+        jQuery("#crep3").text('-');
+        alert("Un-Subscribed from chicken Details successfully");
+    }
+
+    function subscribe_fish() {
+        $.ajax({
+            type: "POST",
+            url: 'http://localhost:4000/subscribe_fish'
+        });
+        alert("Subscribed to Fish Details successfully");
+    }
+    function unsubscribe_fish() {
+        $.ajax({
+            type: "POST",
+            url: 'http://localhost:4000/unsubscribe_fish'
+        });
+        removeSubData();
+        jQuery("#frep1").text('-');
+        jQuery("#frep2").text('-');
+        jQuery("#frep3").text('-');
+        alert("Un-Subscribed from Fish Details successfully");
+    }
+
+    function subscribe_pork() {
+        $.ajax({
+            type: "POST",
+            url: 'http://localhost:4000/subscribe_pork'
+        });
+        
+        alert("Subscribed to pork Details successfully");
+    }
+    function unsubscribe_pork() {
+        $.ajax({
+            type: "POST",
+            url: 'http://localhost:4000/unsubscribe_pork'
+        });
+        removeSubData();
+        jQuery("#prep1").text('-');
+        jQuery("#prep2").text('-');
+        jQuery("#prep3").text('-');
+        alert("Un-Subscribed from pork Details successfully");
+    }
+
+    function subscribe_beef() {
+        $.ajax({
+            type: "POST",
+            url: 'http://localhost:4000/subscribe_beef'
+        });
+        alert("Subscribed to beef Details successfully");
+    }
+    function unsubscribe_beef() {
+        $.ajax({
+            type: "POST",
+            url: 'http://localhost:4000/unsubscribe_beef'
+        });
+        removeSubData();
+        jQuery("#brep1").text('-');
+        jQuery("#brep2").text('-');
+        jQuery("#brep3").text('-');
+        alert("Un-Subscribed from beef Details successfully");
+    }
+</script>
+
+<body>
+
+    <body>
+        <div class="head-container" align="CENTER">
+            <h1>Food Details</h1>
+        </div>
+        <table align="CENTER">
+            <tr>
+                <th><B><span>Chicken</span></B></th>
+                <th><button onclick="subscribe_chicken()">Subscribe</button></th>
+                <th><button onclick="unsubscribe_chicken()">Un-Subscribe</button></th>
+            </tr>
+            <tr>
+                <th> <B><span>Fish</span></B></th>
+                <th><button onclick="subscribe_fish()">Subscribe</button></th>
+                <th><button onclick="unsubscribe_fish()">Un-Subscribe</button></th>
+            </tr>
+            <tr>
+                <th> <B><span>Pork</span></B></th>
+                <th><button onclick="subscribe_pork()">Subscribe</button></th>
+                <th><button onclick="unsubscribe_pork()">Un-Subscribe</button></th>
+            </tr>
+            <tr>
+                <th> <B><span>Beef</span></B></th>
+                <th><button onclick="subscribe_beef()">Subscribe</button></th>
+                <th><button onclick="unsubscribe_beef()">Un-Subscribe</button></th>
+            </tr>
+        </table>
+        <table align="CENTER">
+            <tr>
+                <th><B><span>Food Name</span></B></th>
+                <th><B><span>Protein</span></B></th>
+                <th><B><span>Calories</span></B></th>
+            </tr>
+            <tr>
+                <th><B>
+                        <% if(name == 'chicken'){ %>
+                            <span id = "crep1">
+                                <%= name%>
+                            </span>
+                            <% } else{ %>
+                                <span id = "crep1">-</span>
+                                <% } %>
+                    </B></th>
+                <th>
+                    <% if(name == 'chicken'){ %>
+                        <span id = "crep2">
+                            <%= protein%>
+                        </span>
+                        <% } else{ %>
+                            <span id = "crep2">-</span>
+                            <% } %>
+                </th>
+                <th>
+                    <% if(name == 'chicken'){ %>
+                        <span id = "crep3">
+                            <%= calories%>
+                        </span>
+                        <% } else{ %>
+                            <span id = "crep3">-</span>
+                            <% } %>
+                </th>
+            </tr>
+            <tr>
+                <th><B>
+                        <% if(name == 'fish'){ %>
+                            <span id = "frep1">
+                                <%= name%>
+                            </span>
+                            <% } else{ %>
+                                <span id = "frep1">-</span>
+                                <% } %>
+                    </B></th>
+                <th>
+                    <% if(name == 'fish'){ %>
+                        <span id = "frep2">
+                            <%= protein%>
+                        </span>
+                        <% } else{ %>
+                            <span id = "frep2">-</span>
+                            <% } %>
+                </th>
+                <th>
+                    <% if(name == 'fish'){ %>
+                        <span id = "frep3">
+                            <%= calories%>
+                        </span>
+                        <% } else{ %>
+                            <span id = "frep3">-</span>
+                            <% } %>
+                </th>
+            </tr>
+
+            <tr>
+                <th><B>
+                        <% if(name == 'beef'){ %>
+                            <span id = "brep1">
+                                <%= name%>
+                            </span>
+                            <% } else{ %>
+                                <span id = "brep1">-</span>
+                                <% } %>
+                    </B></th>
+                <th>
+                    <% if(name == 'beef'){ %>
+                        <span id = "brep2">
+                            <%= protein%>
+                        </span>
+                        <% } else{ %>
+                            <span id = "brep2">-</span>
+                            <% } %>
+                </th>
+                <th>
+                    <% if(name == 'beef'){ %>
+                        <span id = "brep3">
+                            <%= calories%>
+                        </span>
+                        <% } else{ %>
+                            <span id = "brep3">-</span>
+                            <% } %>
+                </th>
+            </tr>
+            <tr>
+                <th><B>
+                        <% if(name == 'pork'){ %>
+                            <span id = "prep1">
+                                <%= name%>
+                            </span>
+                            <% } else{ %>
+                                <span id = "prep1">-</span>
+                                <% } %>
+                    </B></th>
+                <th>
+                    <% if(name == 'pork'){ %>
+                        <span id = "prep2">
+                            <%= protein%>
+                        </span>
+                        <% } else{ %>
+                            <span id = "prep2">-</span>
+                            <% } %>
+                </th>
+                <th>
+                    <% if(name == 'pork'){ %>
+                        <span id = "prep3">
+                            <%= calories%>
+                        </span>
+                        <% } else{ %>
+                            <span id = "prep3">-</span>
+                            <% } %>
+                </th>
+            </tr>
+
+            
+        </table>
+    </body>
+</body>
